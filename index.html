@@ -64,12 +64,12 @@
       const afterSix = hour >= END_HOUR;
 
       const lastLine = afterSix
-        ? "great work today, we will start with this tomorrow."
-        : "c'mon, let’s work on this now.";
+        ? "Great work today! We will start with this tomorrow."
+        : "C'mon, let’s work on this now.";
 
       document.getElementById("out").textContent =
-        `good ${greet}\n\n` +
-        `you have ${time.hours} hours ${time.minutes} minutes left today\n\n` +
+        `${greet}\n\n` +
+        `You have ${time.hours} hours and ${time.minutes} minutes left today.\n\n` +
         lastLine;
     }
 
