@@ -1,0 +1,80 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont;
+      background: transparent;
+    }
+    .wrap {
+      padding: 12px 14px;
+    }
+    .text {
+      white-space: pre-wrap;
+      font-size: 18px;
+      line-height: 1.4;
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div id="out" class="text">loading…</div>
+  </div>
+
+  <script>
+    const TIMEZONE = "America/Los_Angeles";
+    const END_HOUR = 18; // 6 PM PT
+
+    function nowPT() {
+      return new Date(
+        new Date().toLocaleString("en-US", { timeZone: TIMEZONE })
+      );
+    }
+
+    function greeting(hour) {
+      if (hour < 12) return "morning";
+      if (hour < 18) return "afternoon";
+      return "evening";
+    }
+
+    function remainingTime(now) {
+      const end = new Date(now);
+      end.setHours(END_HOUR, 0, 0, 0);
+
+      let diff = end - now;
+      if (diff < 0) diff = 0;
+
+      const totalMins = Math.floor(diff / 60000);
+      return {
+        hours: Math.floor(totalMins / 60),
+        minutes: totalMins % 60
+      };
+    }
+
+    function tick() {
+      const now = nowPT();
+      const hour = now.getHours();
+      const greet = greeting(hour);
+
+      const time = remainingTime(now);
+      const afterSix = hour >= END_HOUR;
+
+      const lastLine = afterSix
+        ? "we will start with this tomorrow."
+        : "let’s work on this now.";
+
+      document.getElementById("out").textContent =
+        `good ${greet}\n\n` +
+        `you have ${time.hours} hours ${time.minutes} minutes left today\n\n` +
+        lastLine;
+    }
+
+    tick();
+    setInterval(tick, 15000);
+  </script>
+</body>
+</html>
