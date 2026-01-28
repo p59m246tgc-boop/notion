@@ -55,22 +55,34 @@
       };
     }
 
-    function tick() {
-      const now = nowPT();
-      const hour = now.getHours();
-      const greet = greeting(hour);
+    function formatLocalTime(date) {
+      return new Intl.DateTimeFormat(undefined, {
+        hour: "numeric",
+        minute: "2-digit"
+      }).format(date);
+    }
 
-      const time = remainingTime(now);
+    function tick() {
+      const ptNow = nowPT();
+      const localNow = new Date();
+
+      const hour = ptNow.getHours();
+      const greet = greeting(hour);
       const afterSix = hour >= END_HOUR;
 
-      const lastLine = afterSix
-        ? "Great work today! We will start with this tomorrow."
-        : "C'mon, let’s work on this now.";
-
-      document.getElementById("out").textContent =
-        `${greet}\n\n` +
-        `You have ${time.hours} hours and ${time.minutes} minutes left today.\n\n` +
-        lastLine;
+      if (!afterSix) {
+        const time = remainingTime(ptNow);
+        document.getElementById("out").textContent =
+          `${greet}\n\n` +
+          `You have ${time.hours} hours and ${time.minutes} minutes left today.\n\n` +
+          `C'mon, let’s work on this now.`;
+      } else {
+        const localTimeStr = formatLocalTime(localNow);
+        document.getElementById("out").textContent =
+          `${greet}\n\n` +
+          `It’s ${localTimeStr}.\n\n` +
+          `Great work today! We will start with this tomorrow.`;
+      }
     }
 
     tick();
